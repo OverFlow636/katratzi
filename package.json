@@ -1,0 +1,12 @@
+{
+  "name": "katratzi",
+  "version": "0.0.0",
+  "main": "app.js",
+  "author": "OverFlow636",
+  "dependencies": {
+    "express": "^4.13.3",
+    "express-hbs": "^0.8.4",
+    "node-tvdb": "~1.4.2",
+    "sabnzbd": "^1.0.0"
+  }
+}
