@@ -1,0 +1,28 @@
+<form method="get">
+  <input type="text" name="q" value="{{q}}">
+  <input type="submit" value="Search">
+</form>
+<hr>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th style="width:150px;">Series Name</th>
+      <th>Description</th>
+      <th>Year</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each data}}
+      <tr>
+        <td>{{SeriesName}}</td>
+        <td>{{Overview}}</td>
+        <td>{{chop FirstAired 4}}</td>
+        <td><a href="/show/{{id}}" class="btn btn-primary">Track</a></td>
+      </tr>
+    {{/each}}
+  </tbody>
+
+</table>
+
+

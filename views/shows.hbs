@@ -1,0 +1,26 @@
+<style>
+  img {
+    max-width:100%;
+  }
+  ul {
+    list-style:none;
+  }
+</style>
+
+<div class='panel panel-default'>
+  <div class='panel-heading'>
+    Heading
+  </div>
+  <div class='panel-body'>
+    Body
+  </div>
+</div>
+
+<a href="/search">Add More Shows</a>
+
+
+{{#each shows}}
+  <div>
+    <a href="/show/{{id}}"><img alt="{{SeriesName}}" src="http://thetvdb.com/banners/{{banner}}"></a>
+  </div>
+{{/each}}

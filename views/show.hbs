@@ -1,7 +1,17 @@
-{{show.SeriesName}}
+<img alt="{{SeriesName}}" src="http://thetvdb.com/banners/{{show.banner}}">
 
-<ul>
   {{#each show.Episodes}}
-    <li>S{{pad SeasonNumber}}E{{pad EpisodeNumber}}  {{EpisodeName}}</li>
+
+    <table class="table table-bordered">
+      <tr>
+        <th colspan="2">Season {{season}}</th>
+      </tr>
+      {{#each episodes}}
+        <tr>
+          <td>E{{pad EpisodeNumber}}</td>
+          <td>{{EpisodeName}}</td>
+        </tr>
+      {{/each}}
+    </table>
+
   {{/each}}
-</ul>

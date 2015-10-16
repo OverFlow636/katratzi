@@ -115,6 +115,11 @@ var orm = new Waterline();
 var diskAdapter = require('sails-disk');
 var async = require('async');
 
+
+app.use(express.static('public'));
+
+
+
 var config = {
   adapters: {
     'default': diskAdapter,
@@ -146,7 +151,9 @@ orm.loadCollection(Show);
 orm.loadCollection(Episode);
 
 
-
+hbs.registerHelper('chop', function(text, count) {
+  return text.substr(0, count);
+});
 
 
 hbs.registerHelper('pad', function(num, options) {
@@ -175,7 +182,7 @@ app.set('views', __dirname + '/views');
 app.get('/shows', function(req, res) {
   app.models.show.find().exec(function(err, models) {
     if(err) return res.json({ err: err }, 500);
-    res.json(models);
+    res.render('shows', {shows:models});
   });
 });
 
@@ -204,10 +211,43 @@ app.get('/show/:id', function(req, res) {
       if (req.query.season) {
         conditions.SeasonNumber = req.query.season;
       }
-      app.models.episode.find().where(conditions).exec(function (e, episodes) {
-        d.Episodes = episodes;
-        res.render('show', {show: d});
-      });
+      app.models.episode.find()
+        .where(conditions)
+        .sort({SeasonNumber: 'Desc'})
+        .sort({EpisodeNumber: 'Desc'})
+        .exec(function (e, episodes) {
+          var seasons = {};
+          for (var x=0; x<episodes.length; x++) {
+            if (!seasons.hasOwnProperty(episodes[x].SeasonNumber)) {
+              seasons[episodes[x].SeasonNumber] = [];
+            }
+            seasons[episodes[x].SeasonNumber].push(episodes[x]);
+          }
+
+          var keys = Object.keys(seasons);
+          keys.reverse();
+          var out = [];
+          for(var x=0; x < keys.length; x++) {
+            out.push({
+              'season': keys[x],
+              'episodes': seasons[keys[x]]
+            })
+          }
+          d.Episodes = out;
+          var bc = [
+            {
+              href: '/shows',
+              title: 'TV Shows',
+              class: 'title'
+            },
+            {
+              href: '/show/' + d.id,
+              title: d.SeriesName,
+              class: 'active'
+            }
+          ];
+          res.render('show', {show: d, breadcrumbs: bc});
+        });
     } else {
       console.log('from tvdb');
       tvdb.getSeriesAllById(req.params.id, function(e, d) {
@@ -217,6 +257,8 @@ app.get('/show/:id', function(req, res) {
         for (var x=0; x< d.Episodes.length; x++) {
           saves.push(function(episode) {
             return function(callback) {
+              episode.EpisodeNumber = parseInt(episode.EpisodeNumber, 10);
+              episode.SeasonNumber = parseInt(episode.SeasonNumber, 10);
               app.models.episode.create(episode, callback);
             }
           }(d.Episodes[x]));
@@ -245,11 +287,15 @@ app.get('/show/:id', function(req, res) {
   */
 });
 
-app.get('/search/:query', function(req, res) {
-  tvdb.getSeriesByName(req.params.query, function(e, d) {
-    console.log(d);
-    res.render('search', {data:d});
-  });
+app.get('/search', function(req, res) {
+  if (req.query.q) {
+    tvdb.getSeriesByName(req.query.q, function (e, d) {
+      console.log(d);
+      res.render('results', {data: d, q:req.query.q});
+    });
+  } else {
+    res.render('search', {});
+  }
 });
 
 app.get('/', function (req, res) {
