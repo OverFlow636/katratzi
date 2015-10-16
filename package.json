@@ -4,9 +4,13 @@
   "main": "app.js",
   "author": "OverFlow636",
   "dependencies": {
+    "async": "^1.4.2",
     "express": "^4.13.3",
     "express-hbs": "^0.8.4",
+    "firebase": "^2.3.1",
     "node-tvdb": "~1.4.2",
-    "sabnzbd": "^1.0.0"
+    "sabnzbd": "^1.0.0",
+    "sails-disk": "^0.10.8",
+    "waterline": "^0.10.26"
   }
 }

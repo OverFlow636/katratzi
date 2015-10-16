@@ -110,6 +110,44 @@ var express = require('express');
 var app = express();
 var hbs = require('express-hbs');
 var util = require('util');
+var Waterline = require('waterline');
+var orm = new Waterline();
+var diskAdapter = require('sails-disk');
+var async = require('async');
+
+var config = {
+  adapters: {
+    'default': diskAdapter,
+    disk: diskAdapter
+  },
+  connections: {
+    myLocalDisk: {
+      adapter: 'disk'
+    }
+  },
+  defaults: {
+    migrate: 'alter'
+  }
+};
+
+var Show = Waterline.Collection.extend({
+  identity: 'show',
+  connection: 'myLocalDisk',
+  schema: false
+});
+
+var Episode = Waterline.Collection.extend({
+  identity: 'episode',
+  connection: 'myLocalDisk',
+  schema: false
+});
+
+orm.loadCollection(Show);
+orm.loadCollection(Episode);
+
+
+
+
 
 hbs.registerHelper('pad', function(num, options) {
   function pad(n, width, z) {
@@ -134,14 +172,77 @@ app.set('views', __dirname + '/views');
 
 
 
+app.get('/shows', function(req, res) {
+  app.models.show.find().exec(function(err, models) {
+    if(err) return res.json({ err: err }, 500);
+    res.json(models);
+  });
+});
 
 
+app.get('/episodes', function(req, res) {
+
+  app.models.episode.find().exec(function(err, models) {
+    if(err) return res.json({ err: err }, 500);
+    res.json(models);
+  });
+
+});
 
 app.get('/show/:id', function(req, res) {
-  tvdb.getSeriesAllById(req.params.id, function(e, d) {
-    console.log(d);
-    res.render('show', {show:d});
-  })
+
+  app.models.show.findOne({id: req.params.id}, function (e, d) {
+    if (e) {
+      return res.json(500, e);
+    }
+
+    if (d) {
+      console.log('from db');
+      var conditions = {
+        seriesid: d.id
+      };
+      if (req.query.season) {
+        conditions.SeasonNumber = req.query.season;
+      }
+      app.models.episode.find().where(conditions).exec(function (e, episodes) {
+        d.Episodes = episodes;
+        res.render('show', {show: d});
+      });
+    } else {
+      console.log('from tvdb');
+      tvdb.getSeriesAllById(req.params.id, function(e, d) {
+
+        //save
+        var saves = [];
+        for (var x=0; x< d.Episodes.length; x++) {
+          saves.push(function(episode) {
+            return function(callback) {
+              app.models.episode.create(episode, callback);
+            }
+          }(d.Episodes[x]));
+        }
+        async.series(saves, function(e, episodes) {
+          if (e) {
+            return res.send(500, e);
+          }
+
+          delete d.Episodes;
+
+          app.models.show.create(d, function(err, model) {
+            if(err) return res.json({ err: err }, 500);
+
+            res.render('show', {show: d});
+          });
+        });
+
+
+      });
+    }
+
+  });
+
+  /*console.log('querying tvdb');
+  */
 });
 
 app.get('/search/:query', function(req, res) {
@@ -156,9 +257,16 @@ app.get('/', function (req, res) {
   res.render('hello')
 });
 
-var server = app.listen(3000, function () {
-  var host = server.address().address;
-  var port = server.address().port;
 
-  console.log('Example app listening at http://%s:%s', host, port);
+
+orm.initialize(config, function(err, models) {
+  if(err) throw err;
+
+  app.models = models.collections;
+  app.connections = models.connections;
+
+  // Start Server
+  app.listen(3000);
+  
+  console.log("running http://localhost:3000/");
 });
