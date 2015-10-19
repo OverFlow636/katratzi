@@ -9,7 +9,13 @@
       {{#each episodes}}
         <tr>
           <td>E{{pad EpisodeNumber}}</td>
+          <td>{{FirstAired}}</td>
           <td>{{EpisodeName}}</td>
+          {{#if local}}
+            <td>{{local.dir}}/{{local.file}}</td>
+          {{else}}
+            <td></td>
+          {{/if}}
         </tr>
       {{/each}}
     </table>
