@@ -149,7 +149,7 @@
         "tms_wanted_old": "1",
         "zap2it_id": "EP00299415",
         "createdAt": "2015-10-18T18:32:09.899Z",
-        "updatedAt": "2015-10-18T23:12:50.140Z",
+        "updatedAt": "2015-10-19T00:20:37.059Z",
         "localDirs": [
           "/home/joey/PhpstormProjects/katratzi/TV/Farscape"
         ]
@@ -182,7 +182,10 @@
         "tms_wanted_old": "1",
         "zap2it_id": "EP01562200",
         "createdAt": "2015-10-18T20:42:56.805Z",
-        "updatedAt": "2015-10-18T20:42:56.805Z"
+        "updatedAt": "2015-10-19T00:20:27.688Z",
+        "localDirs": [
+          "/home/joey/PhpstormProjects/katratzi/TV/Farscape"
+        ]
       }
     ],
     "episode": [
