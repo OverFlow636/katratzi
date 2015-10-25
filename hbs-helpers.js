@@ -4,6 +4,10 @@ module.exports = function(app) {
     return text.substr(0, count);
   });
 
+  app.hbs.registerHelper('tvdbimg', function(text) {
+    return text.replace(/\//g, '---');
+  });
+
   app.hbs.registerHelper('pad', function (num, options) {
     function pad(n, width, z) {
       z = z || '0';

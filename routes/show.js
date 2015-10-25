@@ -27,16 +27,16 @@ module.exports = function(req, res) {
       ];
       showData.Episodes = data;
 
-      show.setLocalDir('/home/joey/PhpstormProjects/katratzi/TV/Farscape', function(e, d) {
-        console.log('local set', e, d)
-        res.render('show', {show: showData, breadcrumbs: bc});
-      });
-
-      //show.refreshLocalEpisodes(function(files) {
-        //res.render('show', {show: showData, breadcrumbs: bc});
+      //show.setLocalDir('/mnt/drobo/tv/Farscape/', function(e, d) {
+      //  console.log('local set', e, d)
+      //  res.render('show', {show: showData, breadcrumbs: bc});
       //});
 
-      //res.render('show', {show: showData, breadcrumbs: bc});
+      //show.refreshLocalEpisodes(function(files) {
+      //  res.render('show', {show: showData, breadcrumbs: bc});
+      //});
+
+      res.render('show', {show: showData, breadcrumbs: bc});
     });
 
   });

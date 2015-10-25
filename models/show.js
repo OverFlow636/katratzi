@@ -29,7 +29,7 @@ class Show {
         callback(null, d);
       } else {
         console.log('from tvdb');
-        app.tvdb.getSeriesAllById(this.id, function(e, d) {
+        app.tvdb.getSeriesAllById(me.id, function(e, d) {
 
           //save
           var saves = [];
@@ -38,7 +38,7 @@ class Show {
               return function(callback) {
                 episode.EpisodeNumber = parseInt(episode.EpisodeNumber, 10);
                 episode.SeasonNumber = parseInt(episode.SeasonNumber, 10);
-                models.episode.create(episode, callback);
+                me.models.episode.create(episode, callback);
               }
             }(d.Episodes[x]));
           }
