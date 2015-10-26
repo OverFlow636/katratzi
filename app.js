@@ -31,17 +31,20 @@ console.log(warehouse2);
 // App Setup
 var express     = require('express');
 var app         = express();
+var bodyParser  = require('body-parser')
 app.hbs         = require('express-hbs');
 app.Waterline   = require('waterline');
 app.orm         = new app.Waterline();
-app.tvdb = new (require('node-tvdb/compat'))('F99767CE09713083');
 
+app.tvdb = new (require('node-tvdb/compat'))('F99767CE09713083');
 // Middleware
 app.use(express.static('public'));
 app.use(function(req, res, next) {
   req.app = app;
   next();
 });
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Helpers
 require('./hbs-helpers')(app);

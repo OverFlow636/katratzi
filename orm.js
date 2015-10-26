@@ -18,4 +18,5 @@ module.exports = function(app) {
 
   require('./models/show')(app);
   require('./models/episode')(app);
+  require('./models/dognzb')(app);
 };

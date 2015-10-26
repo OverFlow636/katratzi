@@ -5,7 +5,10 @@ module.exports = function(app) {
   });
 
   app.hbs.registerHelper('tvdbimg', function(text) {
-    return text.replace(/\//g, '---');
+    if (text) {
+      return text.replace(/\//g, '---');
+    }
+    return '';
   });
 
   app.hbs.registerHelper('pad', function (num, options) {
