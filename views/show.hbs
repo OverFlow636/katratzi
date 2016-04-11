@@ -1,23 +1,27 @@
 <img alt="{{SeriesName}}" src="/tvdbimages/{{tvdbimg show.banner}}">
 
-  {{#each show.Episodes}}
+{{#each show.Episodes}}
 
-    <table class="table table-bordered">
+  <table class="table table-bordered">
+    <tr>
+      <th colspan="2">Season {{season}}</th>
+    </tr>
+    {{#each episodes}}
       <tr>
-        <th colspan="2">Season {{season}}</th>
+        <td>E{{pad EpisodeNumber}}</td>
+        <td>{{FirstAired}}</td>
+        <td>{{EpisodeName}}</td>
+        {{#if local}}
+          <td>{{local.dir}}/{{local.file}}</td>
+        {{else}}
+          <td></td>
+        {{/if}}
       </tr>
-      {{#each episodes}}
-        <tr>
-          <td>E{{pad EpisodeNumber}}</td>
-          <td>{{FirstAired}}</td>
-          <td>{{EpisodeName}}</td>
-          {{#if local}}
-            <td>{{local.dir}}/{{local.file}}</td>
-          {{else}}
-            <td></td>
-          {{/if}}
-        </tr>
-      {{/each}}
-    </table>
+    {{/each}}
+  </table>
 
-  {{/each}}
+{{/each}}
+
+<script>
+  console.log({{{json show}}})
+</script>

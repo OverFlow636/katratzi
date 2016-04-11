@@ -50,20 +50,20 @@ app.use(bodyParser.urlencoded({extended: true}));
 require('./hbs-helpers')(app);
 
 // DB ORM
-require('./orm')(app);
+require('./models')(app);
 
 // Start App Server
 app.orm.initialize(app.ormConfig, function(err, models) {
   if (err) throw err;
 
   // Models
-  app.models = models.collections;
+  app.models      = models.collections;
   app.connections = models.connections;
 
   // Views
   app.engine('hbs', app.hbs.express4({
-    partialsDir: __dirname + '/views/partials',
-    defaultLayout: 'views/layouts/main'
+    partialsDir   : __dirname + '/views/partials',
+    defaultLayout : 'views/layouts/main'
   }));
   app.set('view engine', 'hbs');
   app.set('views', __dirname + '/views');
@@ -73,4 +73,13 @@ app.orm.initialize(app.ormConfig, function(err, models) {
 
   app.listen(3000);
   console.log("running http://localhost:3000/");
+
+  // Timers
+  /*var Tock = require('tock').Tock;
+  Tock.windInterval(function () {
+    console.log('one second passed')
+  }, 1000, 'seconds');
+*/
+
+
 });

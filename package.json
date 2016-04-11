@@ -13,8 +13,10 @@
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "node-tvdb": "~1.4.2",
+    "request": "^2.70.0",
     "sabnzbd": "^1.0.0",
     "sails-disk": "^0.10.8",
+    "tock": "OverFlow636/Tock",
     "waterline": "^0.10.26"
   }
 }

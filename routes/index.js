@@ -1,8 +1,9 @@
 module.exports = function(app) {
-  app.get('/shows', require('./routes/shows'));
-  app.get('/show/:id', require('./routes/show'));
 
-  app.get('/search', require('./routes/search'));
+  app.use('/shows', require('./shows')());
+
+
+  app.get('/search', require('./search'));
 
   app.get('/tvdbimages/:query', function(req, res) {
     var request = require('request');

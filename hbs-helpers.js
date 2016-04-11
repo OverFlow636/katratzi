@@ -11,6 +11,10 @@ module.exports = function(app) {
     return '';
   });
 
+  app.hbs.registerHelper('json', function(obj) {
+    return JSON.stringify(obj);
+  });
+
   app.hbs.registerHelper('pad', function (num, options) {
     function pad(n, width, z) {
       z = z || '0';

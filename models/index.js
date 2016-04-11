@@ -16,7 +16,7 @@ module.exports = function(app) {
     }
   };
 
-  require('./models/show')(app);
-  require('./models/episode')(app);
-  require('./models/dognzb')(app);
+  require('./show')(app);
+  require('./episode')(app);
+  require('./dognzb')(app);
 };

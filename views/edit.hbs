@@ -1,0 +1,23 @@
+<form method="post">
+<table id="attrs" class="table table-bordered table-striped">
+</table>
+  <input type="submit" value="Save">
+</form>
+
+<script>
+  var show = {{{json show}}};
+
+  var keys = Object.keys(show);
+  delete keys[keys.indexOf('id')];
+
+  keys.forEach(function(key) {
+    if (show[key] != null) {
+      var table = document.getElementById('attrs');
+      table.innerHTML += `<tr>
+        <td>${key}</td>
+        <td><input type=text name=${key} value="${show[key]}"</td>
+      </tr>`;
+    }
+  });
+
+</script>
